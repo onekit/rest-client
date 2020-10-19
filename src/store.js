@@ -25,7 +25,7 @@ const actions = {
     },
 
     updateUserInformation({ commit }, userId) {
-        Vue.http.get(`users/${userId}`).then(response => {
+        Vue.http.get(`api/users/${userId}`).then(response => {
             commit('updateUser', response.body);
         });
     },

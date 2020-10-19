@@ -23,7 +23,7 @@
         <table class="ui small compact orange celled table">
             <thead v-if="!isCreatingNewRecord">
                 <tr>
-                    <th colspan="2">{{ user.firstName }}</th>
+                    <th colspan="2">{{ user.firstName }} {{ user.lastName }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,31 +35,31 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="isCreatingNewRecord">
-                    <td class="six wide"><strong>FirstName</strong></td>
+                <tr>
+                    <td class="six wide"><strong>First Name</strong></td>
                     <td class="ten wide">
                         <div class="ui fluid input">
                             <input type="text" v-model="user.firstName">
                         </div>
                     </td>
                 </tr>
-                <tr v-if="isCreatingNewRecord">
-                    <td class="six wide"><strong>LastName</strong></td>
+                <tr>
+                    <td class="six wide"><strong>Last Name</strong></td>
                     <td class="ten wide">
                         <div class="ui fluid input">
                             <input type="text" v-model="user.lastName">
                         </div>
                     </td>
                 </tr>
-                <tr v-if="isCreatingNewRecord">
-                    <td class="six wide"><strong>Phone</strong></td>
+                <tr>
+                    <td class="six wide"><strong>Phone number</strong></td>
                     <td class="ten wide">
                         <div class="ui fluid input">
                             <input type="text" v-model="user.phone">
                         </div>
                     </td>
                 </tr>
-                <tr v-if="isCreatingNewRecord">
+                <tr>
                     <td class="six wide"><strong>Password</strong></td>
                     <td class="ten wide">
                         <div class="ui fluid input">
@@ -144,7 +144,7 @@ export default {
                     this.isLoading = false;
                 }, errorHandler);
             } else if (this.isEditing) {
-                this.$http.put(`users/${this.user.id}`, payload).then(() => {
+                this.$http.put(`api/users/${this.user.id}`, payload).then(() => {
                     this.isEditing = false;
                     this.shouldShowPositiveMessage = true;
                     this.$store.dispatch('updateUserInformation', this.user.id);
