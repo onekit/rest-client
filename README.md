@@ -1,5 +1,5 @@
 
-# VueJS Rest client example
+# VueJS REST client example
 
 Back-end for this client available here: https://github.com/onekit/rest-api/
 
