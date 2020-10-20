@@ -66,9 +66,7 @@ export default {
         },
         filteredUsers() {
             return filter(this.users, (item) => {
-              console.log(item);
-                const hasUserMatch = item;
-                //const hasUserMatch = (item.name.toLowerCase().indexOf(this.searchQuery) !== -1);
+                const hasUserMatch = (item.lastName.toLowerCase().indexOf(this.searchQuery) !== -1);
                 return hasUserMatch;
             });
         }

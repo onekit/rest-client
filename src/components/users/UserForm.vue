@@ -12,7 +12,7 @@
                 <div v-for="(item, index) in errors">
                   <div class="header">{{ index }}</div>
                   <ul>
-                    <li v-for="(subItem, subIndex) in item">
+                    <li v-for="subItem in item">
                       <p>{{ subItem }}</p>
                     </li>
                   </ul>
@@ -27,43 +27,66 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="isCreatingNewRecord">
+                <tr>
                     <td class="six wide"><strong>Email</strong></td>
                     <td class="ten wide">
+                        <div class="ui fluid input" v-if="isEditing">
+                          <input type="text" v-model="user.email" >
+                        </div>
+                        <div class="ui fluid input" v-else>
+                          {{ user.email }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="six wide"><strong>ID</strong></td>
+                    <td class="ten wide">
                         <div class="ui fluid input">
-                            <input type="text" v-model="user.email">
+                          {{ user.id }}
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td class="six wide"><strong>First Name</strong></td>
                     <td class="ten wide">
-                        <div class="ui fluid input">
+                        <div class="ui fluid input" v-if="isEditing">
                             <input type="text" v-model="user.firstName">
+                        </div>
+                        <div class="ui fluid input" v-else>
+                            {{ user.firstName }}
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td class="six wide"><strong>Last Name</strong></td>
                     <td class="ten wide">
-                        <div class="ui fluid input">
+                      <div class="ui fluid input" v-if="isEditing">
                             <input type="text" v-model="user.lastName">
+                        </div>
+                        <div class="ui fluid input" v-else>
+                            {{ user.lastName }}
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td class="six wide"><strong>Phone number</strong></td>
                     <td class="ten wide">
-                        <div class="ui fluid input">
+                        <div class="ui fluid input" v-if="isEditing">
                             <input type="text" v-model="user.phone">
+                        </div>
+                        <div class="ui fluid input" v-else>
+                            {{ user.phone }}
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td class="six wide"><strong>Password</strong></td>
                     <td class="ten wide">
-                        <div class="ui fluid input">
+                        <div class="ui fluid input" v-if="isEditing">
                             <input type="text" v-model="user.password">
+                        </div>
+                        <div class="ui fluid input" v-else>
+                            {{ user.password }}
                         </div>
                     </td>
                 </tr>
@@ -86,7 +109,7 @@ export default {
     },
     data() {
         return {
-            errors: null,
+            errors: [],
             isEditing: false,
             isLoading: false,
             shouldShowPositiveMessage: false,
@@ -119,6 +142,7 @@ export default {
             this.isLoading = true;
 
             const payload = {
+                firstName: this.user.firstName,
                 lastName: this.user.lastName,
                 email: this.user.email,
                 phone: this.user.phone,
@@ -128,10 +152,18 @@ export default {
             if (this.isCreatingNewRecord) {
                 payload.firstName = this.user.firstName;
                 payload.lastLast = this.user.lastName;
+                payload.email = this.user.email;
+                payload.phone = this.user.phone;
+                payload.password = this.user.password;
             }
 
             const errorHandler = error => {
-                this.errors = error.body.errors;
+                if (error.body.message) {
+                  this.errors.push([error.body.message]);
+                }
+                if (error.body.errors) {
+                  this.errors = error.body.errors;
+                }
                 this.shouldShowNegativeMessage = true;
                 this.isLoading = false;
             };
@@ -157,7 +189,7 @@ export default {
             this.$emit('cancelButtonClicked');
         },
         resetInitialState() {
-            this.errors = null;
+            this.errors = [];
             this.isEditing = false;
             this.shouldShowPositiveMessage = false;
             this.shouldShowNegativeMessage = false;
